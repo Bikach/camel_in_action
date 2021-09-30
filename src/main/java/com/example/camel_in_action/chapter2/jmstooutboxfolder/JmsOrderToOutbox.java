@@ -10,6 +10,8 @@ import org.apache.camel.impl.DefaultCamelContext;
 import javax.jms.ConnectionFactory;
 
 public class JmsOrderToOutbox {
+    private static final String DATA_PATH = "src/main/java/com/example/camel_in_action/chapter2/jmstooutboxfolder/";
+
     public static void main(String[] args) throws Exception {
         CamelContext context = new DefaultCamelContext();
         ConnectionFactory connectionFactory =
@@ -19,13 +21,13 @@ public class JmsOrderToOutbox {
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
-                from("file:src/main/java/com/example/camel_in_action/chapter2/jmstooutboxfolder/data?noop=true")
+                from("file:" + DATA_PATH + "data?noop=true")
                         .log(LoggingLevel.INFO, "=== XML filename : ${header.CamelFileName}")
                         .to("jms:xmlOrders");
 
                 from("jms:xmlOrders")
                         .log(LoggingLevel.INFO, "=== XML filename : ${header.CamelFileName}")
-                        .to("file:src/main/java/com/example/camel_in_action/chapter2/jmstooutboxfolder/outbox?noop=true");
+                        .to("file:" + DATA_PATH + "outbox?noop=true");
             }
         });
         context.start();

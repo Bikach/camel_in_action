@@ -9,6 +9,8 @@ import org.apache.camel.impl.DefaultCamelContext;
 import javax.jms.ConnectionFactory;
 
 public class SendOrderToJmsMulticast {
+    private static final String DATA_PATH = "src/main/java/com/example/camel_in_action/chapter2/multicast/";
+
     public static void main(String[] args) throws Exception {
         CamelContext context = new DefaultCamelContext();
         ConnectionFactory connectionFactory =
@@ -18,7 +20,7 @@ public class SendOrderToJmsMulticast {
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
-                from("file:src/main/java/com/example/camel_in_action/chapter2/multicast/data?noop=true")
+                from("file:" + DATA_PATH + "data?noop=true")
                         .to("jms:xmlOrders");
 
                 from("jms:xmlOrders")
@@ -26,7 +28,7 @@ public class SendOrderToJmsMulticast {
                         .stopOnException() // optional
                         .parallelProcessing() // optional
                         .to("jms:production")
-                        .to("file:src/main/java/com/example/camel_in_action/chapter2/multicast/accounting?noop=true");
+                        .to("file:" + DATA_PATH + "accounting?noop=true");
 
                 /*
                     from("direct:production")
