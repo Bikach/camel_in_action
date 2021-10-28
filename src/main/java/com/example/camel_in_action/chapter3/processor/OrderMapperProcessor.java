@@ -1,18 +1,17 @@
-package com.example.camel_in_action.chapter3.usingeipsandjava.processor;
+package com.example.camel_in_action.chapter3.processor;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
 import static java.util.Arrays.stream;
 
-public class OrderToCsvProcessor implements Processor {
+public class OrderMapperProcessor implements Processor {
 
     private static final String SEPARATOR = "@";
 
     @Override
     public void process(Exchange exchange) {
         String custom = exchange.getIn().getBody(String.class);
-        System.out.println("=========".concat(custom));
         StringBuilder csv = buildFirstPartOfCSV(custom);
         String[] itemIds = custom.substring(30).split(SEPARATOR);
         stream(itemIds).forEach(itemId -> csv.append(",").append(itemId.trim()));

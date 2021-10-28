@@ -14,10 +14,10 @@ public class JmsOrderToOutbox {
 
     public static void main(String[] args) throws Exception {
         CamelContext context = new DefaultCamelContext();
-        ConnectionFactory connectionFactory =
-                new ActiveMQConnectionFactory("tcp://localhost:61616");
-        context.addComponent("jms",
-                JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
+        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+
+        context.addComponent("jms", JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
+
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
