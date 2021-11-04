@@ -1,4 +1,4 @@
-package com.example.camel_in_action.chapter3.transformingXMLwithXSLT;
+package com.example.camel_in_action.chapter3.transforming;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
@@ -8,7 +8,7 @@ import org.apache.camel.impl.DefaultCamelContext;
 
 import javax.jms.ConnectionFactory;
 
-import static com.example.camel_in_action.chapter3.data.Path.DATA;
+import static com.example.camel_in_action.Path.CHAPTER_3;
 
 public class TransformWithXSLT {
     public static void main(String[] args) throws Exception {
@@ -21,12 +21,12 @@ public class TransformWithXSLT {
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
-                from("file:" + DATA.path + "xslt/from?noop=true")
-                        .to("xslt://file:" + DATA.path + "xslt/xsltransformer/transform.xsl")
+                from("file:" + CHAPTER_3.path + "transforming/data/xslt/from?noop=true")
+                        .to("xslt://file:" + CHAPTER_3.path + "transforming/data/xslt/xsltransformer/transform.xsl")
                         .to("jms:queue:transformed");
 
                 from("jms:queue:transformed")
-                        .to("file:" + DATA.path + "xslt/to?fileName=cds.html");
+                        .to("file:" + CHAPTER_3.path + "transforming/data/xslt/to?fileName=cds.html");
             }
         });
         context.start();

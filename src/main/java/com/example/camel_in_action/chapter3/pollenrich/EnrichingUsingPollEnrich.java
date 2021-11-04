@@ -9,7 +9,7 @@ import org.apache.camel.impl.DefaultCamelContext;
 
 import javax.jms.ConnectionFactory;
 
-import static com.example.camel_in_action.chapter3.data.Path.DATA;
+import static com.example.camel_in_action.Path.CHAPTER_3;
 
 public class EnrichingUsingPollEnrich {
     public static void main(String[] args) throws Exception {
@@ -22,10 +22,10 @@ public class EnrichingUsingPollEnrich {
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
-                from("file:" + DATA.path + "from?noop=true")
+                from("file:" + CHAPTER_3.path + "pollenrich/data/from?noop=true")
                         .to("jms:clientQueue")
                         .process(new OrderMapperProcessor())
-                        .pollEnrich("file:src/main/java/com/example/camel_in_action/chapter3/pollenrich/data/from?noop=true",
+                        .pollEnrich("file:" + CHAPTER_3.path + "pollenrich/data/from?noop=true",
                                 (oldExchange, newExchange) -> {
                                     if (newExchange == null) {
                                         return oldExchange;
@@ -36,7 +36,7 @@ public class EnrichingUsingPollEnrich {
                                     oldExchange.getIn().setBody(body);
                                     return oldExchange;
                                 })
-                        .to("file:src/main/java/com/example/camel_in_action/chapter3/pollenrich/data/to?fileName=report-completed.txt");
+                        .to("file:" + CHAPTER_3.path + "pollenrich/data/to?fileName=report-completed.txt");
             }
         });
 

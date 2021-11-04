@@ -1,4 +1,4 @@
-package com.example.camel_in_action.chapter3.transformmethoddsl;
+package com.example.camel_in_action.chapter3.transforming;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
@@ -6,7 +6,7 @@ import org.apache.camel.Expression;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 
-import static com.example.camel_in_action.chapter3.data.Path.DATA;
+import static com.example.camel_in_action.Path.CHAPTER_3;
 
 public class StringToCSVWithMethodTransform {
 
@@ -15,12 +15,12 @@ public class StringToCSVWithMethodTransform {
         context.addRoutes(new RouteBuilder() {
             public void configure() {
                 // first method
-                from("file:" + DATA.path + "from?noop=true")
+                from("file:" + CHAPTER_3.path + "transforming/data/method/from?noop=true")
                         .transform(body().regexReplaceAll("@", "-"))
-                        .to("file:" + DATA.path + "to/first?fileName=report-first-edition");
+                        .to("file:" + CHAPTER_3.path + "transforming/data/method/to/first?fileName=report-first-edition");
 
                 //second method
-                from("file:" + DATA.path + "to/first")
+                from("file:" + CHAPTER_3.path + "transforming/data/method/to/first?noop=true")
                         .transform(new Expression() {
                             public <T> T evaluate(Exchange exchange, Class<T> type) {
                                 String body = exchange.getIn().getBody(String.class);
@@ -29,7 +29,7 @@ public class StringToCSVWithMethodTransform {
                                 return (T) body;
                             }
                         })
-                        .to("file:" + DATA.path + "to/second?fileName=report-second-edition");
+                        .to("file:" + CHAPTER_3.path + "transforming/data/method/to/second?fileName=report-second-edition");
 
             }
         });
