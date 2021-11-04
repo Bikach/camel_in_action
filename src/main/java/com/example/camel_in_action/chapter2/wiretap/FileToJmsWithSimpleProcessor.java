@@ -8,6 +8,8 @@ import org.apache.camel.impl.DefaultCamelContext;
 
 import javax.jms.ConnectionFactory;
 
+import static com.example.camel_in_action.Path.CHAPTER_2;
+
 public class FileToJmsWithSimpleProcessor {
     public static void main(String[] args) throws Exception {
         CamelContext context = new DefaultCamelContext();
@@ -19,7 +21,7 @@ public class FileToJmsWithSimpleProcessor {
 
         context.addRoutes(new RouteBuilder() {
             public void configure() {
-                from("file:src/main/java/com/example/camel_in_action/chapter2/wiretap/data?noop=true")
+                from("file:"+ CHAPTER_2.path +"wiretap/data?noop=true")
                         .process(exchange -> System.out.println("===== Received order: " + exchange.getIn().getBody()))
                         .to("jms:xmlOrder");
             }

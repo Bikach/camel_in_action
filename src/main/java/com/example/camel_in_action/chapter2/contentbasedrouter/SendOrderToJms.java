@@ -8,6 +8,7 @@ import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.impl.DefaultCamelContext;
 
 import javax.jms.ConnectionFactory;
+import static com.example.camel_in_action.Path.CHAPTER_2;
 
 public class SendOrderToJms {
     public static void main(String[] args) throws Exception {
@@ -19,7 +20,7 @@ public class SendOrderToJms {
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
-                from("file:src/main/java/com/example/camel_in_action/chapter2/contentbasedrouter/data?noop=true")
+                from("file:"+ CHAPTER_2.path +"contentbasedrouter/data?noop=true")
                         .choice()
                             .when(header("CamelFileName").endsWith(".xml"))
                                 .log(LoggingLevel.INFO, "=== First filename : ${header.CamelFileName}")

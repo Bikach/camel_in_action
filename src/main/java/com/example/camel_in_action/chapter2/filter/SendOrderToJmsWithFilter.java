@@ -9,6 +9,8 @@ import org.apache.camel.impl.DefaultCamelContext;
 
 import javax.jms.ConnectionFactory;
 
+import static com.example.camel_in_action.Path.CHAPTER_2;
+
 public class SendOrderToJmsWithFilter {
     public static void main(String[] args) throws Exception {
         CamelContext context = new DefaultCamelContext();
@@ -19,7 +21,7 @@ public class SendOrderToJmsWithFilter {
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
-                from("file:src/main/java/com/example/camel_in_action/chapter2/filter/data?noop=true")
+                from("file:"+ CHAPTER_2.path +"filter/data?noop=true")
                         .filter(xpath("/order[@test='true']"))
                         .log("Received XML order: ${header.CamelFileName}")
                         .to("jms:oderTest");
